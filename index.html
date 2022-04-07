@@ -13,11 +13,12 @@
       </div>
       <form id="reg_form">
         <h1 class="headings">Registration Form</h1>
-        <input type="text" name="" value="" placeholder="Vehicle Owner Name">
-        <input type="text" name="" value="" placeholder="Vehicle Name">
-        <input type="text" name="" value="" placeholder="Vehicle Number">
-        <input type="date" name="" value="" placeholder="Entry Date: dd/mm/yyyy">
-        <input type="date" name="" value="" placeholder="Exit Date: dd/mm/yyyy">
+        <input type="text" name="owner" value="" placeholder="Vehicle Owner Name">
+        <input type="text" name="vName" value="" placeholder="Vehicle Name">
+        <input type="text" name="vNumber" value="" placeholder="Vehicle Number">
+        <input type="date" name="entryDate" value="" placeholder="Entry Date: dd/mm/yyyy">
+        <input type="date" name="exitDate" value="" placeholder="Exit Date: dd/mm/yyyy">
+        <input type="submit" name="submit" value="SUBMIT">
       </form>
     </section>
     <section id="records">
@@ -31,9 +32,9 @@
           <option value="entryDate">Entry Date</option>
           <option value="exitDate">Exit Date</option>
         </select>
-        <input id="searchInput" type="text" name="" value="" placeholder=" Search Entries..">
+        <input id="searchInput" type="text" name="searchTerm" value="" placeholder=" Search Entries..">
         <button type="submit" name="button">SEARCH</button>
-      </div>
+       </div>
       </form>
         <div class="table_container">
         <table>
@@ -45,35 +46,12 @@
             <th>Exit Date</th>
             <th>Delete</th>
           </thead>
-          <tbody>
-            <tr>
-              <td>Rahul Kumar</td>
-              <td>Audi A8</td>
-              <td>UP-7256</td>
-              <td>10-10-2023</td>
-              <td>11-10-2023</td>
-              <td>Delete</td>
-            </tr>
-            <tr>
-              <td>Rahul Kumar</td>
-              <td>Audi A8</td>
-              <td>UP-7256</td>
-              <td>10-10-2023</td>
-              <td>11-10-2023</td>
-              <td>Delete</td>
-            </tr>
-            <tr>
-              <td>Rahul Kumar</td>
-              <td>Audi A8</td>
-              <td>UP-7256</td>
-              <td>10-10-2023</td>
-              <td>11-10-2023</td>
-              <td>Delete</td>
-            </tr>
+          <tbody id="cars_table">
           </tbody>
         </table>
       </div>
       <!-- </div> -->
     </section>
+    <script src="index.js"></script>
   </body>
 </html>
