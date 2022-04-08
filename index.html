@@ -16,16 +16,16 @@
         <input type="text" name="owner" value="" placeholder="Vehicle Owner Name">
         <input type="text" name="vName" value="" placeholder="Vehicle Name">
         <input type="text" name="vNumber" value="" placeholder="Vehicle Number">
-        <input type="date" name="entryDate" value="" placeholder="Entry Date: dd/mm/yyyy">
+        <input id="entryDate" type="date" name="entryDate" value="" placeholder="Entry Date: dd/mm/yyyy">
         <input type="date" name="exitDate" value="" placeholder="Exit Date: dd/mm/yyyy">
-        <input type="submit" name="submit" value="SUBMIT">
+        <button id="searchButton" type="submit" name="submit">SUBMIT</button>
       </form>
     </section>
     <section id="records">
       <form id="searchEntry">
         <label class="headings" for="searchInput">Search Existing Records</label>
         <div class="">
-        <select class="" name="">
+        <select class="" name="searchField">
           <option value="owner">Owner</option>
           <option value="vName">Vehicle Name</option>
           <option value="vNumber">Vehicle Number</option>
