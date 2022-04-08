@@ -132,11 +132,17 @@ th, td {
   }
   #records input {
     margin: 1rem 0;
-  }
+  }1
   #records button {
     margin-left: auto;
   }
   #reg_form {
     padding: 2rem 5%;
+  }
+  #reg_form input {
+    margin: 0.5rem 0;
+  }
+  #reg_form h1 {
+    margin-bottom: 0.6rem;
   }
 }
