@@ -76,6 +76,19 @@
   width: -webkit-fill-available;
   text-transform: capitalize;
 }
+#searchButton {
+  width: 10rem;
+  height: 2.5rem;
+  border: none;
+  margin: 1rem 0 1rem auto;
+  background: #62325d;
+  font-weight: bolder;
+  color: white;
+  border-radius: 5px;
+}
+.del {
+  cursor: pointer;
+}
 #records button {
   height: 2.5rem;
   width: 10rem;
