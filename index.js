@@ -1,9 +1,9 @@
 let carsList = [
-  { id: 1, owner: "Rahul Kumar", vName: "Audi A8", vNumber: "UP-4586", entryDate: "10-10-2023", exitDate: "11-12-2023" },
-  { id: 2, owner: "Rohit Kumar", vName: "Mercedes", vNumber: "UP-4486", entryDate: "10-10-2023", exitDate: "11-12-2023" },
-  { id: 3, owner: "Mohit Kumar", vName: "Mercedes", vNumber: "UP-4486", entryDate: "10-10-2023", exitDate: "11-12-2023" },
-  { id: 4, owner: "Sohit Kumar", vName: "Mercedes", vNumber: "UP-4486", entryDate: "10-10-2023", exitDate: "11-12-2023" },
-  { id: 5, owner: "Banti Kumar", vName: "Mercedes", vNumber: "UP-4486", entryDate: "10-10-2023", exitDate: "11-12-2023" },
+  { id: 1, owner: "Rahul Kumar", vName: "Audi A8", vNumber: "UP-4586", entryDate: "01-10-2000", exitDate: "11-12-2023" },
+  { id: 2, owner: "Rohit Kumar", vName: "Honda City", vNumber: "UP-4476", entryDate: "10-10-2022", exitDate: "01-02-2000" },
+  { id: 3, owner: "Mohit Kumar", vName: "Swift Desire", vNumber: "UP-4686", entryDate: "10-05-2023", exitDate: "11-09-2019" },
+  { id: 4, owner: "Sohit Kumar", vName: "Toyota Qualis", vNumber: "UP-4486", entryDate: "15-12-2019", exitDate: "05-07-2022" },
+  { id: 5, owner: "Banti Kumar", vName: "Tata Sumo", vNumber: "UP-4486", entryDate: "10-10-2023", exitDate: "20-03-2021" },
 ]
 
 const tbody = document.querySelector("#cars_table");
