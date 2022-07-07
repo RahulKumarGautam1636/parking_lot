@@ -1,0 +1,77 @@
+body {
+  background: #c0d2d4;
+  font-family: Montserrat;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.head {
+  text-align: center;
+}
+
+.heading {
+  /* position: relative; */
+  color: white;
+  background-color: #2ec2b0;
+  display: inline-block;
+  padding: 5px 15px;
+  font-size: 80px;
+  margin-top: 50px;
+
+}
+section div{
+  /* flex-basis: 23%; */
+  max-width: 20rem;
+  height: 20rem;
+  padding: 10px;
+  border: thin;
+  /* box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05), 0 5px 20px rgba(0, 0, 0, 0.1); */
+  margin: 13px;
+  text-align: center;
+  /* background-color: #fff; */
+  /* background: #c0d2d4; */
+  border-radius: 15px;
+}
+
+section {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 6rem;
+}
+
+div h1{
+  font-size: 65px;
+}
+div h3{
+  font-size: 32px;
+  color: #2ec2b0;
+  margin-bottom: 7%;
+}
+div p{
+  font-weight: 0;
+  font-size: 85.5%;
+}
+
+.cardOne {
+  box-shadow: -10px -10px 10px rgba(255, 255, 255, 0.2),
+               15px  15px 15px rgba(0, 0, 0, 0.1);
+}
+.cardTwo {
+  box-shadow: -10px -10px 10px rgba(255, 255, 255, 0.2),
+               15px  15px 15px rgba(0, 0, 0, 0.1),
+        inset -10px -10px 10px rgba(255, 255, 255, 0.2),
+        inset  15px  15px 15px rgba(0, 0, 0, 0.1);
+}
+.cardThree {
+  box-shadow: inset 4px 4px 5px rgba(255, 255, 255, 0.3),
+              inset -4px -4px 5px rgba(0, 0, 0, 0.1),
+              10px 40px 40px rgba(0, 0, 0, 0.1);
+}
+.cardFour {
+  border: 10px  solid #c0d2d4;
+  box-shadow: -10px -10px 10px rgba(255, 255, 255, 0.2),
+               15px  15px 15px rgba(0, 0, 0, 0.1),
+               inset -10px -10px 10px rgba(255, 255, 255, 0.2),
+               inset  15px  15px 15px rgba(0, 0, 0, 0.1);
+}

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet"/>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <style media="screen">
+    body {
+      background: #c0d2d4;
+      font-family: Montserrat;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    .head {
+      text-align: center;
+    }
+
+    .heading {
+      /* position: relative; */
+      color: white;
+      background-color: #2ec2b0;
+      display: inline-block;
+      padding: 5px 15px;
+      font-size: 80px;
+      margin-top: 50px;
+
+    }
+    section div{
+      /* flex-basis: 23%; */
+      max-width: 20rem;
+      height: 20rem;
+      padding: 10px;
+      border: thin;
+      /* box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05), 0 5px 20px rgba(0, 0, 0, 0.1); */
+      margin: 13px;
+      text-align: center;
+      /* background-color: #fff; */
+      /* background: #c0d2d4; */
+      border-radius: 15px;
+    }
+
+    section {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 6rem;
+    }
+
+    div h1{
+      font-size: 65px;
+    }
+    div h3{
+      font-size: 32px;
+      color: #2ec2b0;
+      margin-bottom: 7%;
+    }
+    div p{
+      font-weight: 0;
+      font-size: 85.5%;
+    }
+
+    .cardOne {
+      box-shadow: -10px -10px 10px rgba(255, 255, 255, 0.2),
+                   15px  15px 15px rgba(0, 0, 0, 0.1);
+    }
+    .cardTwo {
+      box-shadow: -10px -10px 10px rgba(255, 255, 255, 0.2),
+                   15px  15px 15px rgba(0, 0, 0, 0.1),
+            inset -10px -10px 10px rgba(255, 255, 255, 0.2),
+            inset  15px  15px 15px rgba(0, 0, 0, 0.1);
+    }
+    .cardThree {
+      box-shadow: inset 4px 4px 5px rgba(255, 255, 255, 0.3),
+                  inset -4px -4px 5px rgba(0, 0, 0, 0.1),
+                  10px 40px 40px rgba(0, 0, 0, 0.1);
+    }
+    .cardFour {
+      border: 10px  solid #c0d2d4;
+      box-shadow: -10px -10px 10px rgba(255, 255, 255, 0.2),
+                   15px  15px 15px rgba(0, 0, 0, 0.1),
+                   inset -10px -10px 10px rgba(255, 255, 255, 0.2),
+                   inset  15px  15px 15px rgba(0, 0, 0, 0.1);
+    }
+    section div {
+      overflow: hidden;
+    }
+    </style>
+  </head>
+  <body>
+
+    <div class="head">
+      <h1 class="heading">emojipedia</h1>
+    </div>
+    <section>
+      <div class="cardOne">
+        <h1>💪</h1>
+        <h3>Tense Biceps</h3>
+        <p>You can do that!” or “I feel strong!” Arm with tense biceps. Also used in connection with doing sports, e.g. at the gym.</p>
+      </div>
+      <div class="cardTwo">
+        <h1>🙏</h1>
+        <h3>Folded Hands</h3>
+        <p>Two hands pressed together. saying a prayer, or hoping for enlightenment. Is also used as a “high five” or to say thank you.</p>
+      </div>
+      <div class="cardThree">
+        <h1>😜</h1>
+        <h3>Naughty Smile</h3>
+        <p>Smiley boldly sticks out the tongue, winking with one eye. Has made a joke or wants to flirt with the chat partner. Is carefree and does not mean it seriously.</p>
+      </div>
+      <div class="cardFour">
+        <h1>🤣</h1>
+        <h3>Rolling on floor</h3>
+        <p>This is funny! A smiley face, rolling on the floor, laughing. The face is laughing boundlessly. Stands for rolling on the floor, laughing</p>
+      </div>
+      <div class="cardOne">
+        <h1>😅</h1>
+        <h3>Smile with sweat</h3>
+        <p>Sweaty smile. Relief that a tight situation went well or was coped with positively, e.g. an important appointment.</p>
+      </div>
+      <div class="cardTwo">
+        <h1>😂</h1>
+        <h3>Tears fo Joy</h3>
+        <p>I am laughing to hard that I can hardly keep myself on my chair! Something is so incredibly funny that you cry laughing.</p>
+      </div>
+      <div class="cardThree">
+        <h1>🥺</h1>
+        <h3>Begging Eyes</h3>
+        <p>The big eyes are shining, devoted facial expression. The emoji is entreatingly begging for something: wants to borrow some money or the car.</p>
+      </div>
+      <div class="cardFour">
+        <h1>🧐</h1>
+        <h3>Face with Monocle</h3>
+        <p>A monocle is a visual aid with only one glass. Something seems suspicious! The smiley makes a warning look around.</p>
+      </div>
+    </section>
+    <script src="https://unpkg.com/vanilla-tilt@1.7.0/lib/vanilla-tilt.js"></script>
+    <script> VanillaTilt.init(document.querySelectorAll("section div"),{max: 25,	speed: 400, max: 50, glare: true, "max glare": 1})</script>
+  </body>
+</html>
