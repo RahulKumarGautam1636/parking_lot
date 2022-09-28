@@ -18,13 +18,31 @@ function Home(props) {
     const res = await axios.get('https://dummy.restapiexample.com/api/v1/employees', {});
     if (res) {
       setDocList(res.data.data);
-      console.log(res.data.data);
+      console.log(res);
+    } else {
+      alert('Something went wrong, Reload the page.');
     }
     }
     search();
   },[]);
 
-
+  const renderDocProfiles = () => {
+    if (docList.length === 0) {
+        return (
+          <div style={{"minHeight": "18rem", "display": "grid", "placeItems": "center", "background": "#0000003b"}}>
+           <div className="spinner-border text-success" role="status" style={{"width": "3rem", "height": "3rem"}}>
+              <span className="visually-hidden">Loading...</span>
+           </div>
+          </div>
+        )
+    } else {
+      return (
+        <SliderSection docList={docList} id="neurology-slider" heading={'Neurology'}>
+          <ProfileCard/>
+        </SliderSection>
+      )
+    }
+  }
 
   return (
     <div style={{"backgroundImage": "linear-gradient(#00ffff14, transparent,transparent)"}}>
@@ -55,9 +73,8 @@ function Home(props) {
                 <h2 style={{"borderBottom": "2px solid gray", "textTransform": "uppercase", "display": "inline", "letterSpacing": "3px"}}>Specialities</h2>
             </div>
             <div className="container-fluid">
-              <SliderSection docList={docList} id="neurology-slider" heading={'Neurology'}>
-                <ProfileCard/>
-              </SliderSection>
+            {renderDocProfiles()}
+
 
 
 
@@ -92,6 +109,7 @@ function Home(props) {
         </section>
     </div>
   );
+
 }
 
 export default Home;
