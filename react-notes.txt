@@ -1,0 +1,138 @@
+HOW TO WORK WITH THIRD PARTY JS LIBRARIES IN REACT - 
+
+1) These libraries come with two type of code. 
+    i) STATIC CODE - It is static files that is required to be linked to our project to use the library. Just connect them in HTML index file as we do normally.
+    ii) INITIALIZATION CODE - To render the library correctly we need to initialize it with our DOM component, it becomes nessesary to execute the initialization code just after
+                                our DOM ready. There are two use cases to consider in this case.
+                                i) Un-Mountable Comoponent - If we need to use the library on the elements that are never used to unmount (eg - headers/footer) then we can simply 
+                                useScript in App.js file to attach the initialization code the said elements. This method makes sure that all DOM is ready to be used by js.files.
+                                ii) Mountable Components - If we need to use js libraries on mountable components then using above method doesn't works correctly becuase during 
+                                                            already attched js files are not executed again to reinitialize the elements that are using the JS library. To overcome 
+                                                            this we use wrap the initialization code into functions and then call it from within the react components to re-initialize
+                                                            it on every rerender. we need to call these functions in useEffect to make sure DOM is fully loaded before initialization.
+                                                            Since we can not get access to those functions normally in react components hence make sure to declare them as function using
+                                                            not variables. By this method we can assess them on window object and then call it from any of react components.
+                                                            ***See ex- to have better understanding of below issue - suppose we have a slick slider using on a component that is used to
+                                                            show dynamic images. First render is completed normally by initializing and rendering the slick slider correctly. Now suppose
+                                                            user click on something triggering renderer of slick component by changing it's containing images. Between rerender if we 
+                                                            show a loader by replacing the whole slick component then it's ok and will have no errors. But if we try to replace the
+                                                            previous slider with new one (trying to re-initialize the existing slick slider with new data) then this will cause errors.
+                                                            we can use solve it by creating new function with destroy code of the slick slider and call it under return function of
+                                                            useEffect. Also can use try catch on the initialization/destroy functions to solve it but it's but execep these complexities,
+                                                            it is far better to replace the whole slider with spinner and then rerender/re-initialize it with new data.
+
+
+2) State Driven variables - variables defined by processing state values are re-calculated on every page render, also in useEffect page renders. Hence it is important to keep in mind to not use them
+   in useEffect dependency array. doing so will put useEffect in a infinite loop because on each rerender that variable will be recalculated and useEffect will think it as changed new variable hence
+   will rerender again entering in infinite loop trow errors. Ex - this example of variable orderList that is from checkout page of E-pharma app. below are steps
+   to reproduce this error and it's prevention. 
+   i) create cartArray from props 'cart'. which is array of cart items. like this -> var cartArray = Object.values(cart);
+   ii) try creating orderList using cartArray in a useEffect (to prevent warning also passing cartArray in it's dependency array). like this var orderList = cartArray.map(i => i.price);
+   iii) Execution - cartArray is calculated using cart prop and this will be re-calculated on every page render hence passing it in dependency array of useEffect will put it in an infinite
+                    loop because on render useEffect will think cartArray is changed because of it's recalculation. to prevent this just directly use cart prop to calculate orderList
+                    (like this var orderList = Object.values(cart).map(i => i.price)) and then pass cart in dependency array. now since cart is prop hence it's not recalculated which
+                    prevents useEffect from reredering the page.
+
+3) Mount and Unmount event in React components - these events always happens on Normal React components but can cause confusing in case of React Components that are used in Partial pages
+   like modals and offcanvases. Always figure out the about this before working with useEffect on that component. As discussed in below point 4. some time these event doesn't happens which
+   problems in resetting the page on when it remounts. normal function Components don't work with these events while React components work fine with them. see detailed info below point 4.
+
+4) ⭐⭐⭐ We can pass child in React Component using 2 methods both works fine but there is 2 (found till day) major difference between them.
+   Method 1 - Passing child as function - child={LoginModal({handleClose: modalAction, modals: modals})} - Using this method we can pass both function (loginModal()) and the React Components (except redux connected components, see below) (<LoginModal />).
+   Method 2 - Passing child as React component child={<LoginModal handleClose={modalAction} modals={modals} /> - Using this method we can only pass React components.
+   Difference - in method 1 child is passed as a function means it will be treated as a function. hence the concept of mount and unmount (except initial mount) doesn't works on them. this makes clear that if we use useEffect in them then,
+                it will not identify the unmount event and will not rerender the component when it is re-mounted. empty dependency array will not work as expected. for example if we pass Login modal with method 1 then opening the form
+                triggers the mount event but closing it doesn't triggers the unmount event hence re-mount event also never happens, resulting the LoginModal to never reset itself on further openings.
+                ⭐⭐⭐Also note that Redux connected components also cannot get passed using this method. doing so will throw weird errors saying item is not a function.
+  
+                But in the case of method 2 we can pass both normal and redux connected React components but functions are not allowed. unlike method 1, mount and unmount events works perfectly on this case. Using useEffect 
+                with empty dependency array works fine and Component is reset to it's initial state on each mount and unmount events.
+
+5) we can use setState inside useEffect and change the setState from inside but always put dep. array and pass the setState item in it. useEffect will run only on first mount and once everytime we change state.
+
+6) Always use useCallback om functions that is defined outside the useEffect and being used inside useEffect also pass it as a dependency. this is to make sure that the function will run in correct order otherwise it sometime doesn't runs for unknown reason. 
+
+7) If using async function inside useEffect, then never try to access outside variables including states. if during request the variable changes then it will not be reflected in use effect due to asynchrounos nature of async functions. it seems to get the 
+   variable value that was just when async function is triggered. It will cause minor but serious unexpeted behaviours that will be hard to debug. the value of variable becomes unpredictable, sometime it remains correct and sometime wrong.
+   it is better to not place the piece of code that requires outer variables, inside the useEffect that is using async function to make api request or anything else. 
+
+8) useCallback vs useMemo - functions that are directly called in components jsx part is always rerendered or recalled when any of the defined states on the components changes. to prevent this use useMemo not useCallback and put
+                            the dependent state in dependency array. next point discusses why we chose useMemo for this.
+8) let suppose we have a function called todo(). we called it inside jsx like this {todo(someState)} then it is obvious that it must be returning some jsx. now when parent component gets rerendered due to any of state changes then todo() function is also
+               recalculated and renderered with parent component. this might couse some issues with todo() function such as resetting its contents or its state or css. since this component returns jsx hence we choose useMemo to solve this.
+               just wrap todo() in useMemo and put todo state in dependency array and it will be rerendered only when todo state changes. now parent component can not force rerender it. Somehow useCallback does not prevents functions from
+               rendering. may be its because useCallback is made to only wrap functions that perform some operations like setting state instead of returning jsx. useMemo is made to return value hence we can take a function that can process a state
+               and then return new jsx. useMemo perfectly prevents unwanted reredering with parent rerenders.
+
+9) Removing Unnecessary deps - A few things to consider before creating useEffect and passing it's dependencies.
+                               1) Value vs Reference = If a dependency is passed as value (primitive data types) then useEffect will only trigger if value in change happens which means if we set the dependency value to again same value then useEffect
+                                                       will not consider as a change and will not trigger. but if we pass dependency as Reference (non primitive data types) then useEffect will definetely be called. ex - suppose we have an state object 
+                                                       ==> [person, setPerson] = useState({name: 'Rahul', age: 15}). 
+                                                       case i) if we have a useEffect that has person.name as dependency then doing setPerson({name: 'Rahul', age: 20}) will not triger useEffect becasue useEffect relies on exact value of person.name 
+                                                               which is not changin. this is what we are calling as passing by value.
+                                                       case ii) if we put whole state object person as dependency then useEffect will be triggered on doing setPerson({name: 'Rahul', age: 15}). because object is non-primitive value and is reassigned with
+                                                                a new address in memory which lets system assume that it is not same as before. this cause useEffect to trigger each time.
+                               1) Avoid: Updating state by directly using state variable. Ex -
+                                         ❌❌>> setState({...state, key: newValue});        // by doing this we used state variable inside the useEffect and now we'll have to pass it in deps array. which is bad if we don't want to.
+                                         ✅✅>> setState(pre => {...pre, key: newValue})    // this is called updater function. this way we don't use the state variable hence don't need to pass it in deps array.
+                               2) Avoid: Event-specific logic inside an Effect, use event handlers instead - Ex - showing a success notification when user submits a form. instead of creating useEffect use obSubmit event to show the notification.
+                               3) Avoid: Processing two unrelated things in same useEffect - Ex - Calling multiple api calls in same useEffect or updating two unrelated states in same useEffect. this causes bugs hard to debug. split the code in this case
+                                         in such cases. this will make code longer but bug free or can also create custom hook to avoid code repetition.
+                               4) Reactive Values - Props, state, and variables declared inside your component’s body are called reactive values any change in these will rerun the useEffect if they are in it's deps array. try to declare variables outside
+                                                    component body that are not going to change anymore.
+                               4) useEffectEvent - 
+10) Never Replace <div> with <> - In conditional rendering, never try to replace <div></div> with React fragement (<></>) becuase. React fragement are not equal to <div> because React Fragment never adds new node (div) to the DOM. The thrown error says
+                                  "Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node". This means react could not found the correct div to replace. Explanation - suppose you have following conditional rendering
+                                  structure to toggle between content and loading screen.
+
+                                    const renderSlider = (data) => {
+                                       if (data.loading) {
+                                             return <Spinner min_height='24rem' fSize='2rem'/>;
+                                          } else if (data.err.status) {
+                                             return <div className='text-center'>Show an error messages here.</div>;
+                                          } else if (data.data.ImageMasterCollection.length === 0) {
+                                             return <div>Show no data found warning here.</div>;
+                                          } else {
+                                             return (  
+                                                <>                                        // This is the problem here.
+                                                   <div className="main-slide">
+                                                      Real content goes here.
+                                                   </div>
+                                                   <div className="img-slide">
+                                                      Real content goes here.                                                
+                                                   </div>  
+                                                </>
+                                          )
+                                       }
+                                    }
+
+                                    *** THE PROBLEM - with this code is that all the return statements are returning <div> elements but else part is returning a react fragment containing two divs. on page load spinner which adds one div element on DOM, is
+                                                      loaded. On rerender else part runs and removes the spinner (one div) and adds content that is two div wrapped in a react fragement. since react fragement never add new node/div to DOM hence those wrapped
+                                                      div are added as direct child on the DOM. Untill now everything seems to be fine. Error happens when rerender occurs and spinner is atempted to load again. Since we added two div just a moment back, but 
+                                                      react tries to find and replace only one div and this leads to the said error.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+NOTES FROM ANJELA'S COURSE.
+
+DEPLOYING BACKEND SERVER APP ON HEROKU
+
+1) in the project folder > heroku create (check command before using).
+2) create procfile (no extension). put code for starting app ex- web: node index.js
+4) change listening port to app.listen(process.env.PORT || 3000, () => {});
+5) git init and commit the project.
+6) > git push heroku master.
+7) check logs if anything went wrong, by command > heroku logs.
+
+TO UPDATE the app perform steps 5 and 6.
+
+
+USING GIT VERSION CONTROL
+
+git init                                // initialize a git repository.
+git add .                               // add all files to staging area for tracking.
+git commit -m 'first commit'            // commit files, flag -m denotes message for commit which is 'first commit'.
+git push origin master                  // push all files to remote repository.
+
+
+

@@ -1,0 +1,464 @@
+http://192.168.29.240/ cctv link.
+⚪ Animations using jQuery. These function except fadeTo() are asynchronous which means next function will wait till the first one is completed.
+
+	var el = $('#red-box');
+	
+	1) Fading the elements.
+
+		1) el.fadeOut(2000);                                           // fadeOut element in 2000ms. possible predifined values 'fast', 'slow';
+		2) el.fadeIn(2000);                                            // fadeIn element in 2000ms. possible predifined values 'fast', 'slow';
+		3) el.fadeTo(1000, 0.5)                                        // fadeOut element to opacity 0.5 in 1000ms.
+		4) el.fadeToggle() 										       // fadeOut if element is visible and fadeIn if it's already fadeOut.
+
+		pitfall: Using fadeOut() and fadeTo(el, 0.5) togather will not reappear the element because fadeOut sets display none, but fadeTo() only changes the opacity.
+
+	2) Hiding the elements.
+		1) el.hide(2000);											   // hide element with transition in 2 seconds. sets display none.
+		2) el.show(2000);											   // unhide the element with transition in 2 seconds.
+		3) el.toggle(2000);											   // toggle between hide and unhide states.
+		4) el.slideUp(2000);										   // hide the element with slide up animation.
+		5) el.slideDown(2000);									       // unhide the element with slide down animation.
+		6) el.slideToggle(2000);									   // toggle between slide up/down animation.
+	
+	*** Check if an elememt is visible (no display: none) or not.
+		el.is('visible');                                              // returns true or false.
+
+	*** Get all visible (no display: none) children elememts of div having class "content-box".
+		$(`.content-box`).children('div:visible');					   // return array of visible elememts. we can run .each on them.
+
+	3) Animations using jQuery. all the specified properties will be animated at the same time.
+		Using animate() function. it takes three arguments. 
+		i) object with key value pairs of properties to animate.
+		ii) number for duration of animation in milli seconds.
+		iii) string that describes the timing function of animation.
+
+		Basic use :-
+		el.animate({													// color property can not be animated using this way.
+			'margin-left': '+=200px',									// += sign will add 200px margin to elements current margin value. omit += to replace left-margin with 200px.
+			fontSize: '20px'										    // can also use camelCase (without quotes) version of properties like fontSize for 'font-size'.	
+		}, 2000, 'linear');												// all the specified properties will be animated at the same time. no sequencing is used here.
+	
+	4) Delaying and chaining animations to achieve timing / squence in animations.
+		Using delay() function.
+		el.fadeTo(1000, 0.2);													// fadeTo 0.2 opacity.
+		el.delay(1000).fadeTo(1000, 0.5);										// wait 1 second to before fadeTo 0.5.
+		el.delay(2000).fadeTo(1000, 0.8).fadeOut().delay(500).fadeIn();			// wait 2 seconds to before fadeTo 0.8. Then perform multiple animation through chaining animation functions.
+
+		Using callback function. All function like fadeOut, fadeIn etc. accepts callback function as parameter that will be called just when the animation is finished.
+		el.fadeTo(1000, 0.2, function() {
+			el.fadeTo(1000, 0.5, function() {
+				el.fadeIn();	                                                // This is same example shown in delay() function but achieved with callbacks.
+			})
+		})
+
+⚪ Selecting elements using jQuery.
+	Selecting using selectors.
+	$('p');                                                              // Select all <p> elements.
+	$('p.heading')														 // Select all <p> elements with class 'heading'.
+	$('.heading')														 // Select all elements with class 'heading'.
+	$('#heading')														 // Select all elements with id 'heading'.
+	$('h2, p, input, .heading')											 // Select multiple elements in one line.
+	$('li:first')														 // Select first <li> element. use :last to select last one.
+	$('li').first()														 // Another way to select first item. use last() to select last one.
+	$('li:even')														 // Select all even list items. index starts from zero. nested list items also be selected.
+	$('li:odd')														 	 // Select all odd list items. index starts from zero. nested list items also be selected.
+	$("input[type='text']")												 // Select by attribute. select input elements that are of type 'text'.
+	$('input:text')														 // Another way of selecting by type (text in this case). not works only for type email.
+	$('input:checked')													 // Select checked check boxes.
+
+	Selecting using jQuery functions.
+	$('#myList').find('li')											 	// Select all li items from myList. Nested li items will also be selected (Recursive selection).
+	$('#myList').children('li')										 	// Only direct children of myList which are li elements will be selected.
+	$('#myList').parents()												// Select all the parent elements of myList. All the higher parents will also be selected (Recursive selection).
+	$('#myList').parents('div')										 	// Select all the div parents of myList.
+	$('#myList').parent()										 		// Select the direct parent.
+	$('#myList').siblings()												// Select all sibling (elements having common direct parent with myList) elements.
+	$('#myList').siblings('p')											// Select all <p> sigblings. use it to filter sibling elements.
+	$('#myList').siblings(':header')									// Select all h (h1, h2, h3, h4, h5, h6) sigblings.
+	$('#myList').prev()												    // Select previous sibling item. sibling that is just before mylist.
+	$('#myList').next()												    // Select next sibling item. sibling that is just after mylist.
+	$('li').eq(1)														// Select by index number of element. This select 2nd element.
+	$('li').eq(-2)														// Pass -ve index number to select from behind. This selects 2nd element from behind.
+
+	Filter Selection using filter() function.
+	$('#myList').children('li').filter(':even')                         // filter and select only even child items from myList.
+	$('li').filter(function(index) {									// Use callback function to apply custom logic to select elements.
+		return index % 3 === 0;											// Select element only if this return true. This will select all odd li items.
+	})  
+
+	Filtering Selection using not() function. works same as filter but opposite. keeps item when returns false and discards when returns true.
+	$('#myList').children('li').filter(':even')                         // Select all li items except the even items from mylist. which result in selecting all odd items.
+	$('li').not(function(index) {										// Use callback function to apply custom logic to select elements.
+		return index % 3 === 0;											// Select element only if this return false and discart it return true. This will select all even li items.
+	})  
+
+⚪ Manipulating data in elements using jQuery.   
+
+	⭐Adding new elements to DOM.
+	el.append('<li>I'm gonna be the last child</li>')                                      // Adds item as last child.
+	$('<li>I'm gonna be the last child</li>').appendTo(el)                                 // Another way of adding item as last child but with different syntax. it first creates the li item and then uses appendTo to add li in el.
+	$('<li>I'm gonna be the last child</li>').appendTo('#red-box')                         // We can also directly pass the id of target elememt on which item is to be appended. This is same for all similar functions.
+	el.prepend('<li>I'm gonna be the last child</li>')                                     // Adds item as first child.
+	$('<li>I'm gonna be the last child</li>').prependTo(el)								   // Works same as appendTo works for append.
+	el.after('<div>Div Element</div>')                                                     // Add item as next sibling of el.  
+	el.before('<div>Div Element</div>')                                                    // Add item as previous sibling of el. 
+	el.before(el2)					                                                       // Can also pass DOM element (el2) retrieved from jQuery. jQuery moves the retrieved item to new location. This means original retrieved item el2 is also removed from DOM.
+	el.before(function(index) {															   // Can also pass callback function in which we can dynamicall create elements and then add it to the DOM.
+		return '<div>Div Element</div>';
+	})
+
+	⭐Replacing elements from DOM.
+	el.replaceWith('<li>Replaced item</li>');											   // Replace el with this li item.
+	el.replaceWith(function(index) {													   // Can also pass callback function in which we can dynamicall create element and then replace el with the result.
+		return '<div>Div Element</div>';
+	})
+	el.replaceWith(el2)					                                                   // Can also pass DOM element (el2) retrieved from jQuery. jQuery moves the retrieved item to new location. This means original retrieved item el2 is also removed from DOM.
+	$('<div>Div Element</div>').replaceAll('.item-one, .item-two');                        // Shares same analogy of syntax as appendTo shares with append.     
+
+	⭐Removing elements from DOM.  
+	Using remove() function. must see difference b/w remove() and detach() below.                
+	el.remove();																		   // basic usage. removes the element.
+	$('form').children().not('input:text, textarea, label').remove();                      // Remove every direct child of form except input of type text, textarea and labels.
+
+	Using detach() function. must see difference b/w remove() and detach() below.
+	$('form').children().not('input:text, textarea, label').remove();
+
+	Using empty() function.
+	$('p').empty()                                                                        // Removes the inner text content of p tag. doesn't removes the p tag itself, leaving empty p tag in the DOM.
+
+	⭐Storing DOM element in variable and then add it again to DOM. This can be done with both remove() and detach() functions. But they have a major defference b/w then.
+	remove() - Unlike detach() function, The remove() function does not stores the event handlers (onclick, onchange) attached to the removed element which means element will not respond to the events (onclick, onchange) when we add them again to the DOM.
+	detach() - this function keeps event handlers then adds it again to the DOM with element.
+	var removedItem = $('li').remove();												      // remove and save the item in a variable.
+	var removedItem = $('li').detach();													  // notice their defference and use the best suitable to your condition.
+	$('#myDiv').append(removedItem); 													  // add the item back to the myDiv as a child.
+
+	⭐Manipulating attributes and properties using jQuery. ex- attr(), prop(), val().
+	attr() - It is used to manipulate attributes present on the html tags. ex - class, src, style and custom defined attributes.
+		     $('a').attr('href')							// get value of href attribute which is link address of the <a> tag.
+		     $('a').attr('href', 'google.com')				// set value of href attribute to 'google.com'.
+	prop() - It is used to manipulate props present on the html tags. ex - checked, required, disabled are the props used on input elements. they cannot be manipulated by attr() function.
+			 always use prop() function to get state of a prop like state of a checkbox checked/unchecked.
+			 $('input:checkbox').prop('checked')			// get the state (checked/unchecked) of the checkbox.
+    val() - Used to set and read the value (value set on value attribute) of input elements. works only for the first element if multiple elements are been selected. use loop otherwise.
+			$('input:text').val() 						    // get the current value of the input tag.
+			$('input:text').val('hello world') 				// set the value of the input tag to 'hello world'.
+
+	25) Creating an image slide show using jQuery.
+
+	var galleryImage = $('.gallery').find('img').first();			// Get target image. using first() to get only single image item avoiding array of images in case of multiple image selection.
+	var images = [ 'img-1.jpg', 'img-2.jpg', 'img-3.jpg' ];			// array of different images.
+	var i = 0;
+	setInterval(function() {										
+		i = (i + 1) % images.length;                        		// generate index i = 0, 1, 2, 0, 2, 3, 0, 2....
+		galleryImage.fadeOut(function() {							// fadeOut target image 
+			$(this).attr('src', images[i]);							// change src address of target image.
+			$(this).fadeIn();									    // fadeIn with a different image.
+		});
+	}, 2000)
+
+	⭐Manipulating inline css styles using jQuery.
+	el.css('width')   --> '100px'                           		// this is syntax to get a css property but it returns string with px unit. not suitable for numerical calculations. 
+	el.css.width()    --> 100										// this returns the numeric value. use camelCase for other properties.
+	el.css(['font-size', 'width', 'color'])							// get value of multiple properties as an object.
+	--> { 'font-size': '18px', 'width': '100px', 'color': 'red' };
+	el.css('display', 'none')										// this is syntax to set a css property. !important keyword don't works in jQuery.
+	el.css('padding', '+=100px')									// add Relative values (already present padding + 100px).
+	el.css('color', function() {									// callback function version of the css() function. used to perform calculations before adding css styles.
+		return 'red';
+	}) 
+
+	⭐Manipulating css class using jQuery.
+	el.addClass('myClass');                                         // add 'myClass' to the element.
+	$('li').addClass(function(index) {
+		$(this).addClass('item-' + index);							// add class='item-' + index to each li item. $(this) refers current iterating li item.
+	})
+
+	$('div').addClass(function(index, currentClass) {				// find target element by its class name and then manipulate it's classes.
+		if (currentClass === 'targetElementClass') {			    // 'new-class' will be applied to selected element.
+			return 'new-class';
+		}
+	})
+	$('a').removeClass('new-class');								// remove the class.
+	$('#div').removeClass('red-box').addClass('blue-box');          // Chain functions to manipulate classes in sequence.
+
+
+⭐Storing data into DOM elements.				(26)
+	This is very important to store the data in DOM elements so that later on we can access / retrieve it again from any where using javascript. possible solution for storing otp.
+
+var gallery = $('.gallery');															// Get a DOM element.
+var images = ['images/img1.jpg', 'images/img2.jpg', 'images/img3.jpg'];					
+gallery.data('available-images', images);												// this creates an object with property/field 'available-images' and saves the images array in it.
+var galleryName = 'The Awesome Gallery';												
+gallery.data('name', galleryName);														// creating another field named 'name' and the string 'The Awesome Gallery'.
+console.log(gallery());																    // this will return the whole object.
+-> { 
+	images: ['images/img1.jpg', 'images/img2.jpg', 'images/img3.jpg'],
+	name: 'My Awesome Gallery'
+	}
+console.log(gallery.data('name'));														// and this will return only the specified field / property.
+-> { name: 'My Awesome Gallery' };
+gallery.removeData('images');															// remove property / field from the gallery object.
+
+⭐Store and get data from element using data- attribute. To do this use data-mydata attribute. note that prefix 'data-' is required and then put your desired keyword (mydata in this case). ex-
+<p id='greet' data-mydata='hidden data'>Hello world</p>									// 
+
+var el = $('#greet');												// get the element 
+console.log(el.data('mydata'));										// now we can get the data from data-mydata attribute.
+-> hidden data														// this can also be done using attr() function.
+
+⭐Manipulating inner data (data b/w opening and closing tags) of elements.
+	Using .text() function - ignores html elements.
+	Using .html() function - also handles html elements.
+
+	var el = $('p:first');							
+	console.log(el.text());								// log element content as text.
+	console.log(el.html());								// log element content as html.
+	el.html('This was appended');						// replace it's html content.
+
+
+
+EVENT HANDLING USING JQUERY---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+**Event handler - These are the callback functions to handle the DOM events (click, change, load etc).
+⭐⭐⭐ $(this) becomes window object when used with arrow function as callback. so don't use arrow functions for jquery event callbacks.
+⭐⭐⭐ Without dollar ($) sign 'this' becomes the html element itself that was clicked. we can access some of its properties like its class or id name like this. => this.className ---> will return class name of that element.
+
+31) Click event - 
+	var btn = $('#myButton');
+	btn.click(function(event) {							// Add an simple onclick event.
+		console.log(event)							    // This event object contains all the information about the event happend.
+		$(this).css('color', 'red')                     // $(this) refers the currently clicked item. using $(this) we can perform any operation on clicked element (changing color in our case).
+		alert('button was clicked');					// $(this) becomes window object when used with arrow function as callback. so don't use arrow functions for jquery event callbacks.
+	})
+	btn.click();                                        // calling without any parameters will trigger a programmatical click event usign javascript. use it to trigger event handlers programmatically.
+													    // when page loads, the click event will be triggered automatically and onclick handler defined above will be called that will change the color of element to red. 
+
+32) Hover events - Note that hover event happens two times 1) when mouse enters the target element and 2) when mouse leaves the target element. Hence the hover event handler fires two times which may be a problem.
+	btn.hover(function(event) {							// Add an simple hover event.
+		alert('button was clicked');
+	})
+
+	btn.hover(function() {}, function() {})             // when passed 2 callback functions then first one is used as mouseenter event handler and other one is used as mouseleave event handler. It is shorhand for mouseenter, mouseleave events discussed below.
+
+33) Mouseenter and Mouseleave event - As the name suggest, this solves the problem with hover function discussed above. mouseenter() function fires when mouse enters the target and mouseleave fire when mouse leaves the target.
+	btn.mouseenter(function() {
+		$(this).stop().fadeTo(500, 0.7);				// ⭐⭐⭐ the stop() function used to stop the ongoing animation. 
+	})
+
+	btn.mouseleave(function() {
+		$(this).stop().fadeTo(500, 0.7);				// ⭐⭐⭐ using stop() here to stop animation due to fast fluctuation of mouse hover states on the target element. 
+	})
+
+34) Adding Multiple event handlers on one element. 
+	btn.on('click keydown hover', function() {
+		console.log('button was clicked, hovered or a key was pressed');
+	});
+
+33) A problem with event handlers - Event handlers can only be added to an existing element. When adding elements dynamically this becomes a problem. ex -
+	$('p').on('click', function() {										// hide p element when they are clicked.
+		$(this).slideUp();												// all existing p tags will work fine.
+	})
+	$('body').append('<p>This is dynamically added paragraph</p>);		// since this p tag is added later dynamically hence it won't have the above event handler on it. clicking it won't hide it.
+
+	⭐⭐⭐Solution (Delegate Events) - jQuery uses to add the event handler to the parent element and that will distribute it to it's child elements. This way later on added elements will also get the event hanlder when they get added to their parents.  
+	$('body').on('click', 'p', function() {								// add to handler to the parent and pass 3 arguments where 2nd argument is type of child elements to which hanlder is to be passed on.
+		$(this).slideUp();												
+	})
+	$('body').append('<p>This is dynamically added paragraph</p>);		// now it will work fine.
+
+37) Passing additional data to event handlers.
+	btn.click({ user: 'Rahul', work: 'frontend engineer'}, function(event) {           // We can pass an object with data as first argument and then receive it event object.
+		console.log(event.data);													   // Passed data will be in data field of event object.
+		-> { user: 'Rahul', work: 'frontend engineer'};
+	})
+
+38) Click image to preview it in lightbox.
+	var galleryItems = $('.gallery').find('img');											// get all the images.
+	galleryItems.mouseenter(function() {													
+		$(this).stop().fadeTo(500, 1);														// fadeIn to highlight when mouse enters. images must have 0.7 opacity by default.
+	})
+
+	galleryItems.mouseleave(function() {
+		$(this).stop().fadeTo(500, 0.7);													// fadeOut to opacity 0.7 again when mouse leaves the image.
+	})
+
+	galleryItems.click(function() {															
+		var source = $(this).attr('src');													// get the source (href) value of the target image.
+		var image = $('<img>').attr('src', source).css('width', '100%');					// create a new image with source image address and set it's width to 100%.
+		$('.lightbox').empty().append(image).fadeIn(2000);									// empty lightbox and then add the create image to it.
+	})
+
+	galleryItems.click(function() {
+		$(this).stop().fadeOut();															// Close the lightbox when user clicks on it.
+	})																						// stop() is here to stop any ongoing fading animation if user clicks to fast before completing fade animation.
+
+38) Handling Key-board events - Fires when any key is pressed on keyboard. there are three types of keyboard events.
+	i) keypress event - it fires when any key is pressed. it is not crossbrowser compatible hence avoid using it.
+	ii) keydown event - it fires when a key is down-pressed.
+	ii) keyup event - it fires when a key is release after pressing.
+
+	$('html').keydown(function(event) {
+		console.log(event.which);									// .which is supplied by jQuery which tells which key is pressed.
+	})
+
+	Task - move the div when use clicks right arrow key
+	$('html').keydown(function(event) {
+		if (event.which === 39) {									// keycode for right arrow key is 39.
+			$('div').stop().css('margin-left': '+=10px');			// increase the margin-left by 10px for each key press.
+		}								
+	})
+
+40) Focus and Blur event - these events are usually used on form input elememts.
+	focus event - fires when an input element gains focus and been become highlighted.
+	blur event - fires when an input element loses focus.
+	Task - 1) add black shadow when user focus on input elememt. 2) When losing focus, add red box shadow if user enters less than 3 letters otherwise add green box shadow.
+	
+	var inputFields = $('input:text, input:password');
+	inputFields.focus(function() {								
+		$(this).css('box-shadow', '0 0 4px #666');				// add black box shadow on focus to highlight the selected elememt.
+	})
+	inputFields.blur(function() {
+		var inputValue = $(this).val();							// get the text value entered by user.
+		if (inputValue < 3) {									// check if text value is less than 3 letters.
+			$(this).css('box-shadow', '0 0 4px red');			// add red box shadow if true.
+		} else {
+			$(this).css('box-shadow', '0 0 4px red');		    // add red box shadow if false.
+		}
+	})
+
+41) Change event - Fires when state of an input elememt changes. mostly used on checkbox, radio, select elememt and text-boxes.
+	Task - We have a checkbox with a label. add red border to bothe checkbox and label when checkbox is unchecked and green when checked.
+
+	<label for='cb'>Label for Checkbox</lable>
+	<input type='checkbox' id='cb' />
+
+	$('#checkbox').change(function() {
+		var isChecked = $(this).is(':checked');									// get the state of checkbox. can also be checked with .prop() function.
+		if (isChecked) {
+			$(this).add("label[cb='cb']").css('border', '1px solid #green');	// add green borders when true. add() is little bit confusing. docs says it never add new elememt but modifies existing elememt.
+		} else {																// it applies same style to passed elememt (label) as the styles of target elememt (this - checkbox). here we select checkbox and adding border to it. 
+		$(this).add("label[cb='cb']").css('border', '1px solid #red');			// now add() comes into play and it adds same style (border) to the passed elememt (label) also.
+		}
+	})
+
+	Task - We have a select elememt with multiple options. show an alert whenever user select an option from select elememt.
+
+	$('#selection').change(function() {
+		var selectedOption = $(this).find(':selected').text();  			// get the value of selected select elememt. using text to get text content of option elememt.
+		alert(selectedOption);												// use val() to get value of value field of option.
+	})
+
+42) Submit event - Fires when submit button is clicked present in a form elememt. Good place for handling form validation to check the entered form data before submitting it to the servers.
+	Task - Let the user submit the form only if the inputbox is not empty and also add red border on it to indicade the user that something is wrong.
+
+	$('form').submit(function() {
+		var inputBox = ('#myInput').val().trim();								// get the inputbox and trim() it to remove which spaces in it.
+		if (inputBox === '') {													// check if it's empty string.
+			inputBox.css('border', '1px solid red');							// add red border if true.
+			event.preventDefault();												// prevent the default form submission.
+		} 
+	})
+
+43) Form Validation - Checking the validity of entered data in different form fields.
+	Task - We have a form with a textbox (name), password, textarea (message), checkbox and a feedback p tag for each of them during submission of form of any of the elememt is empty then
+		   it's corresponding feedback p elememt will show up with a warning indicating what went wrong and also disappears after filling the input field.
+
+	$('#form').submit(function(e) {
+		var name = $('#name').val();								// get all the form field's values.
+		var password = $('#password').val();
+		var message = $('#message').val();
+		var checked = $('#checkbox').is(':checked');				// get the state of checkbox true/false.
+
+		validateText(name, e);
+		validatePassword(password, e);
+		validateCheckbox(checked, e)
+	})
+
+	function validateText(text, e) {
+		if (text.length < 3) {															// check if text length is less that 3.
+			$('#name-feedback').text('Please enter at least 3 characters.');			// dynamicall insert the message in the existing p elememt.
+			e.preventDefault();															// prevent the default form submission.
+		}
+	}
+
+	function validatePassword(password, e) {
+		if (password.length < 6 && /.*[0-9].*/.test(password)) {						// check if text length is less that 3. second condition checks if password contains at least 1 numeric value.
+			$('#password-feedback').text('Please enter at least 6 characters and 1 numeric character.');		// show feedback.
+			e.preventDefault();															// prevent the default form submission.
+		}
+	}
+
+	function validateCheckbox(checked, e) {
+		if (!checked) {																	// check state of checkbox.
+			$('#checkbox-feedback').text('Please agree to our terms and conditions.');	// show feed back if false (not checked).
+			e.preventDefault();
+		}
+	}
+
+44) Fast feedback form - It's nothing but to use blur event, The blur() function on form input elememts to show instant feedbacks to the user about the errors they made while filling an input. for checkbox use change() event instead.
+                         see Blur event and blur() function examples.
+
+45) AJAX -  jQuery provides some asynchronous function to handle asynchronous operations in javascript such as making api requests, retrieving file from a server.
+		   
+		    i) load() - Method loads data from our own local server or a file and puts the returned data into the selected element.
+
+				$('#div').load('demo.txt');                       	// will add the returned data to the selected div elememt.
+
+				$('#div').load('demo.txt', function(res, status) {	// can also take callback function to perform logical calculations before adding data to div.
+						if (status == 'error') {
+							alert('couldn't find the file');
+						}
+						console.log(res);
+				});
+			
+			ii) getJSON() - Customised method to fetch data from apis that serve data only in the form of JSON.
+
+				var flickrApiUrl = 'https://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?;      // Flickr API url.
+
+				$.getJSON(flickrApiUrl, {
+					tags: 'sun, beach',												  // option object to dictate what to search on flickr. what options needed are specified by flickr docs.
+					tagmode: 'any',
+					format: 'json'													  
+				}).done(function(data) {												  // done() function fires when request is successfull. api returned data is received as parameter.
+					$.each(data.items, function(index, item) {							  // jQuery has it's own each function to iterate over arrays and objects. using it to add received images to the page.
+						$('<img>').attr('src', item.media.m).appendTo('#flickr');		  // create image elememt, set it's src to received image url and append it to the flickr div elememt.
+						if (index == 5) {												  // stop adding more that 5 images.
+							return false;												  // returning false will stop the each() function.
+						}
+					})
+				}).fail(function() {													  // fail() function fires if any error occures during api call.
+					alert('AJAX call failed');											  // alert the user about the error.
+				}).always(function() {													  // always() function is called everytime whether responce is success or error.
+					console.log('made an api request');									
+				});
+
+49) More advance use of API request - Get a list of pokemon characters from 'pokeapi.co' and use jQuery to list them as anchor links in an unordered list. 
+	cliking the names will make another api request to pokeapi to fetch details and images of that clicked item. Finally render those images on the page dynamically. 
+
+	var pokeapiUrl = 'http://pokeapi.co/api/v2/generation/1;
+	var pokeapiByName = 'http://pokeapi.co/api/v2/pokemon/';
+
+	$.getJSON(pokeapiUrl).done(function(data) {																   // get data from api call.
+		$.each(data.pokemon_species, function(index, pokemon) {												   // run each function on pokemon_species array.
+			var name = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);						   // convert the first character of name to uppercase.
+			var link = $('<a>').attr('id', pokemon.name).attr('href', '#').append($('<strong>').text(name));   // create a tag with id='name' and href='#', also create a strong tag with inner text of name. Now add the a tag to the strong elememt for a bold name link.
+			var par = $('<p>').html('Pokemon species no. ' (index + 1) + ' is ').append(link);				   // create a p elememt with dynamic inner html and append it to the link created above. it create p tag with nested bold anchor elememt.
+
+			link.click(function(e) {									
+				$.getJSON(pokeapiByName + pokemon.name).done(function(details) {							   // pass pokemon.name to get details of specific pokemon character.
+					var pokemonDiv = $('#pokemon-details');													   // get the div on which details are to be shown.
+					pokemonDiv.empty();																		   // empty it first to remove previous content.
+					pokemonDiv.append('<h2>' + name + '</h2>');												   // append h2 tag with name of the character.
+					pokemonDiv.append("img scr='" + details.sprites.front_default + "'>");					   // create image with dynamic src link and add to the div.
+				})
+				event.preventDefault();																		   // prevent default behaviour of anchor tags.
+			});
+			par.appendTo('#pokemon');																		   // append the p elememt to page.
+		})
+	}).fail(function() {
+		console.log('Request to Pokemon failded.');															   // alert the user about any possible errors happend during api call.
+	}).always(function() {
+		console.log('Pokemon is awesone.');																	   // this will run everytime.
+	});
+

@@ -1,0 +1,27 @@
+1) Await - Await keyword stops Execution of code untill it it's promise is resolved. This happens only if the function that is having the promise returns somethig that contains data from the promise.
+           otherwise it won't stops Execution and below code from running.
+
+           >>   const sleepTimer = async (sec) => {
+                    let n = 5;
+                    let timer = new Promise((resolve, reject) => {         // Only await can stop code excution and it works only with promises. hence code stops can't be simulated using setTimeout only.
+                        setTimeout(() => {
+                            resolve(10);
+                            console.log('resolved');
+                        }, sec);
+                    })
+                    n = n + await timer;                🔺🔺
+                    return n;
+                }
+            
+           >>   const demo = async () => {
+                    let res = await sleepTimer(5000);
+                    console.log('response : ', res);
+                }
+
+           >>   demo();                                     
+           ->   'resolved'                        // this logs when normally called. return value of sleepTimer dependents on the Promise Timer.
+           ->   'response : 15                    // code Execution stops to wait for promise resolve.
+
+           >>   demo();                                     
+           ->   response : 5                      // this logs when called by commenting out 🔺🔺 marked line. return value of sleepTimer does not dependents on the Promise Timer.
+           ->   'resolved'                        // code Execution does not stops to wait for promise resolve.
